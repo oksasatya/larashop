@@ -4,7 +4,12 @@
     Daftar User disini
 
 
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
 
+    @endif
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -30,9 +35,17 @@
                     </td>
                     <td>
                         <a href="{{ route('users.edit', [$user->id]) }}" class="btn btn-info text-white btn-sm">edit</a>
+                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-primary btn-sm">Detail</a>
+                        <form action="post" action="{{ route('users.destroy', [$user->id]) }} "
+                            onsubmit="return confirm('Delete this user permanently?')" class="d-inline">
+                            @csrf
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="submit" value="Delete" class="btn btn-danger btn-sm">
+                        </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
+
     </table>
 @endsection
