@@ -9,7 +9,7 @@
         <div class="card">
             <div class="card-body">
                 <b>name:</b><br>
-                {{ user->name }}
+                {{ $user->name }}
                 <br>
                 <br>
 
