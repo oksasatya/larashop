@@ -14,7 +14,7 @@
                 <br>
 
                 @if ($user->avatar)
-                    <img src="{{ asset('storage/' . $user->avatar) }} " width="120px">
+                    <img src="{{ asset('storage/' . $user->avatar) }} " width="128px">
 
                 @else
                     No Avatar
@@ -25,7 +25,7 @@
                 {{ $user->email }}
                 <br>
                 <br>
-                <b>Phone Number</b>
+                <b>Phone Number</b><br>
                 {{ $user->phone }}
                 <br>
                 <br>

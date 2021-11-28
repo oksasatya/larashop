@@ -10,6 +10,20 @@
         </div>
 
     @endif
+    <div class="row">
+        <div class="col col-md-6">
+            <form action="{{ route('users.index') }}">
+                <div class="input-group mb-3">
+                    <input type="text" name="keyword" placeholder="Filter Berdasarkan email" class="form-control col-md-10"
+                        value="{{ Request::get('keyword') }}">
+
+                    <div class="input-group-append">
+                        <input type="submit" value="filter" class="btn btn-primary">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <table class="table table-bordered">
         <thead>
             <tr>
