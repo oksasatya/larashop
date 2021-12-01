@@ -10,7 +10,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Larashop @yield("title")</title>
     <link rel="stylesheet" href="{{ asset('polished/polished.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('polished/iconic/css/open-iconicbootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('polished/iconic/css/open-iconic-bootstrap.min.css') }}">
     <style>
         .grid-highlight {
             padding-top: 1rem;
@@ -112,6 +112,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
         integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
     </script>
+
 </body>
 
 </html>
