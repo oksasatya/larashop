@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Faker\Factory as FakerFactory;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
@@ -15,6 +16,7 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        // $roles = json_encode((['Administrator', 'Staff', 'Customer']));
         $faker = FakerFactory::create('id_ID');
         return [
             'name' => $faker->name(),
@@ -24,7 +26,7 @@ class UserFactory extends Factory
             'password' => bcrypt('12345678'), // password
             'remember_token' => Str::random(10),
             'address' => $faker->streetAddress(),
-            'roles' => $faker->randomElement(['Administrator', 'Staff', 'Customer']),
+            'roles' => json_encode([$faker->randomElement((['Administrator', 'Staff', 'Customer']))]),
             'phone' => $faker->phoneNumber(),
             'status' => $faker->randomElement(['ACTIVE', 'INACTIVE']),
         ];

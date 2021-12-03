@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -35,3 +36,8 @@ Route::match(['get', 'post'], '/register', function () {
 
 // user route
 Route::resource('users', UserController::class);
+
+// category Trash
+Route::get('categories/trash', [CategoryController::class, 'trash'])->name('categories.trash');
+// category Route
+Route::resource('categories', CategoryController::class);
