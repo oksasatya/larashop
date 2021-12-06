@@ -62,7 +62,7 @@ class CategoryController extends Controller
         $new_category->created_by = Auth::user()->id;
         $new_category->slug = Str::slug($name, '-');
         $new_category->save();
-        return redirect()->route('categories.create')->with('status', 'categories successfully created');
+        return redirect()->route('categories.index')->with('status', 'categories successfully created');
     }
 
     /**
@@ -148,5 +148,34 @@ class CategoryController extends Controller
         $deleteCategory = Category::onlyTrashed()->paginate(10);
 
         return view('categories.trash', ['categories' => $deleteCategory]);
+    }
+
+
+    public function restore($id)
+    {
+        $category = Category::withTrashed()->findOrFail($id);
+
+        if ($category->trashed()) {
+            $category->restore();
+        } else {
+            return redirect()->route('categories.index')
+                ->with('status', 'Category Is not in Trash');
+        }
+
+        return redirect()->route('categories.index')->with('status', 'Category Succesfully Restored');
+    }
+
+    public function deletePermanent($id)
+    {
+        $category = Category::withTrashed()->findOrFail($id);
+
+        if (!$category->trashed()) {
+            return redirect()->route('categories.index')
+                ->with('status', 'can not delete permanent active category');
+        } else {
+            $category->forceDelete();
+
+            return redirect()->route('categories.index')->with('status', 'Category Permanently delete ');
+        }
     }
 }

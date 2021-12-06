@@ -36,7 +36,10 @@ Route::match(['get', 'post'], '/register', function () {
 
 // user route
 Route::resource('users', UserController::class);
-
+//Delete Category Route
+Route::delete('categories/{category}/delete-permanent', [CategoryController::class, 'deletePermanent'])->name('categories.delete-permanent');
+// restore route
+Route::get('categories/{id}/restore', [CategoryController::class, 'restore'])->name('categories.restore');
 // category Trash
 Route::get('categories/trash', [CategoryController::class, 'trash'])->name('categories.trash');
 // category Route
