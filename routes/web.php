@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -44,3 +45,7 @@ Route::get('categories/{id}/restore', [CategoryController::class, 'restore'])->n
 Route::get('categories/trash', [CategoryController::class, 'trash'])->name('categories.trash');
 // category Route
 Route::resource('categories', CategoryController::class);
+
+
+// Book Route
+Route::resource('books', BookController::class);
