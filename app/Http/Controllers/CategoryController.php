@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\New_;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Cache\Store;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
@@ -20,10 +22,12 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $filterKeyword = $request->get('name');
-        $categories = Category::paginate(10);
-
+        $categories = DB::table('categories')->latest()->paginate(10);
+        // Category::with('latestCategory')->get()->sortByDesc('latestCategory.created_at')->paginate(10)
+        // Category::paginate(10)
         if ($filterKeyword) {
-            $categories = Category::where('name', 'LIKE', "%$filterKeyword%")->paginate(10);
+            $categories = Category::where('name', 'LIKE', "%$filterKeyword%")
+                ->paginate(10);
         }
         return view('categories.index', ['categories' => $categories]);
     }

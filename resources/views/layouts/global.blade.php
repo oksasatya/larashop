@@ -80,6 +80,11 @@
                             <span class="oi oi-people"></span> Manage Users
                         </a>
                     </li>
+                    <li>
+                        <a href="{{ route('categories.index') }}" class="oi oi-tag">
+                            <span>Manage Category</span>
+                        </a>
+                    </li>
                     <div class="d-block d-md-none">
                         <div class="dropdown-divider"></div>
                         <li><a href="#"> Profile</a></li>

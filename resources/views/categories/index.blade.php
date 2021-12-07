@@ -83,6 +83,13 @@
                     @endforeach
                 </tbody>
             </table>
+            <tfoot>
+                <tr>
+                    <td colspan="10">
+                        {{ $categories->appends(Request::all())->links() }}
+                    </td>
+                </tr>
+            </tfoot>
         </div>
     </div>
 @endsection
