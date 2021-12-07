@@ -45,7 +45,9 @@ Route::get('categories/{id}/restore', [CategoryController::class, 'restore'])->n
 Route::get('categories/trash', [CategoryController::class, 'trash'])->name('categories.trash');
 // category Route
 Route::resource('categories', CategoryController::class);
+Route::get('/ajax/categories/search', [CategoryController::class, 'ajaxSearch']);
 
 
 // Book Route
+// resource book
 Route::resource('books', BookController::class);

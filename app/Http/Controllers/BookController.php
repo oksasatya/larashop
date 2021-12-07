@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\book;
+use App\Models\Category;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorebookRequest;
+// use Illuminate\Support\Facades\Request;
 use App\Http\Requests\UpdatebookRequest;
 
 class BookController extends Controller
@@ -17,7 +21,13 @@ class BookController extends Controller
      */
     public function index()
     {
-        //
+        // $books = DB::table('books')->when('categories')->latest()->paginate(10);
+        $books = Book::with('categories')->paginate(10);
+
+
+
+
+        return view('books.index', ['books' => $books]);
     }
 
     /**
@@ -36,13 +46,14 @@ class BookController extends Controller
      * @param  \App\Http\Requests\StorebookRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorebookRequest $request)
+    public function store(Request $request)
     {
         $newBook = new Book;
         $newBook->title = $request->get('title');
         $newBook->description = $request->get('description');
         $newBook->author = $request->get('author');
-        $newBook->publisher = $request->get('price');
+        $newBook->publisher = $request->get('publisher');
+        $newBook->price = $request->get('price');
         $newBook->stock = $request->get('stock');
 
         $newBook->status = $request->get('save_action');
@@ -56,8 +67,8 @@ class BookController extends Controller
         }
 
         $newBook->slug = Str::slug($request->get('title'));
-        $newBook = Auth::user()->id;
-
+        $newBook->created_by = Auth::user()->id;
+        $newBook->categories()->attach($request->get('categories'));
         $newBook->save();
 
         if ($request->get('save_action') == 'PUBLISH') {
