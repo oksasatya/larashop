@@ -81,8 +81,8 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('categories.index') }}" class="oi oi-tag">
-                            <span>Manage Category</span>
+                        <a href="{{ route('categories.index') }}">
+                            <span class="oi oi-tag"></span> Manage Category
                         </a>
                     </li>
                     <div class="d-block d-md-none">
