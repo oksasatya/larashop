@@ -8,6 +8,11 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
+            @if (session('status'))
+                <div class="alert alert-success">
+                    {{ session('status') }}
+                </div>
+            @endif
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
@@ -48,7 +53,13 @@
                             <td>{{ $book->stock }}</td>
                             <td>{{ $book->price }}</td>
                             <td>
-                                [TODO:ACTION]
+                                <a href="{{ route('books.edit', [$book->id]) }}" class="btn btn-info btn-sm">Edit</a>
+                                <form action="{{ route('books.destroy', [$book->id]) }}" class="d-inline"
+                                    method="POST" onsubmit="return confirm('move book to trash?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="submit" value="Trash" class="btn btn-danger btn-sm">
+                                </form>
                             </td>
                         </tr>
                     @endforeach

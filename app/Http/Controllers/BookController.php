@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StorebookRequest;
 // use Illuminate\Support\Facades\Request;
 use App\Http\Requests\UpdatebookRequest;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -95,9 +96,11 @@ class BookController extends Controller
      * @param  \App\Models\book  $book
      * @return \Illuminate\Http\Response
      */
-    public function edit(book $book)
+    public function edit(Book $book)
     {
-        //
+        $book->id;
+        // $book = Book::findOrFail($id);
+        return view('books.edit', ['book' => $book]);
     }
 
     /**
@@ -107,9 +110,33 @@ class BookController extends Controller
      * @param  \App\Models\book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatebookRequest $request, book $book)
+    public function update(Request $request, $id)
     {
-        //
+        $book = Book::findOrFail($id);
+
+        $book->title = $request->get('title');
+        $book->slug = $request->get('slug');
+        $book->description = $request->get('description');
+        $book->author = $request->get('author');
+        $book->stock = $request->get('stock');
+        $book->price = $request->get('price');
+        $newCover = $request->file('cover');
+
+        if ($newCover) {
+            if ($book->cover && file_exists(storage_path('app/public/' . $book->cover))) {
+                Storage::delete('public/' . $book->cover);
+            }
+            $newCoverPath = $newCover->store('books-cover', 'public');
+
+            $book->cover = $newCoverPath;
+        }
+
+        $book->updated_by = Auth::user()->id;
+        $book->status = $request->get('status');
+        $book->categories()->sync($request->get('categories'));
+        $book->save();
+
+        return redirect()->route('books.edit', [$book->id])->with('status', 'Book successfully updated');
     }
 
     /**
@@ -120,6 +147,9 @@ class BookController extends Controller
      */
     public function destroy(book $book)
     {
-        //
+        $book->id;
+        $book->delete();
+
+        return redirect()->route('books.index', [$book->id])->with('status', 'Book move to trash');
     }
 }
