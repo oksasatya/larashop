@@ -23,10 +23,7 @@ class BookController extends Controller
     public function index()
     {
         // $books = DB::table('books')->when('categories')->latest()->paginate(10);
-        $books = Book::with('categories')->paginate(10);
-
-
-
+        $books = Book::with('categories')->latest()->paginate(10);
 
         return view('books.index', ['books' => $books]);
     }
@@ -68,10 +65,13 @@ class BookController extends Controller
         }
 
         $newBook->slug = Str::slug($request->get('title'));
-        $newBook->created_by = Auth::user()->id;
-        $newBook->categories()->attach($request->get('categories'));
-        $newBook->save();
 
+        $newBook->created_by = Auth::user()->id;
+
+        // $newBook->categories()->attach($request->get('categories'));
+
+        $newBook->save();
+        $newBook->categories()->attach($request->get('categories'));
         if ($request->get('save_action') == 'PUBLISH') {
             return redirect()->route('books.create')->with('status', 'books succesfully create');
         } else {

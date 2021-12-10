@@ -65,6 +65,13 @@
         $('#categories').select2({
             ajax: {
                 url: 'http://127.0.0.1:8000/ajax/categories/search',
+                crossDomain: true,
+                cors:true,
+                headers: {
+                'Access-Control-Allow-Origin': true,
+                'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+                'Access-Control-Allow-Headers': 'Origin, Content-Type, Authorization, X-Auth-Token',
+                },
                 processResults: function(data) {
                     return {
                         results: data.map(function(item) {
