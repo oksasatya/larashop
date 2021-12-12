@@ -50,4 +50,5 @@ Route::get('/ajax/categories/search', [CategoryController::class, 'ajaxSearch'])
 
 // Book Route
 // resource book
+Route::get('books/trash',[BookController::class ,'trash'])->name('books.trash');
 Route::resource('books', BookController::class);

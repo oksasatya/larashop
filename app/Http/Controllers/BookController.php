@@ -20,10 +20,18 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         // $books = DB::table('books')->when('categories')->latest()->paginate(10);
-        $books = Book::with('categories')->latest()->paginate(10);
+
+
+        $status = $request->get('status');
+
+        if($status){
+            $books = Book::with('categories')->where('status',strtoupper($status))->latest()->paginate(10);
+        }else{
+            $books = Book::with('categories')->latest()->paginate(10);
+        }
 
         return view('books.index', ['books' => $books]);
     }
@@ -151,5 +159,12 @@ class BookController extends Controller
         $book->delete();
 
         return redirect()->route('books.index', [$book->id])->with('status', 'Book move to trash');
+    }
+
+
+    public function trash(){
+        $books = Book::onlyTrashed()->latest()->paginate(10);
+
+        return view('books.trash',['books'=>$books]);
     }
 }
