@@ -52,7 +52,17 @@
                         <td>{{ $book->stock }}</td>
                         <td>{{ $book->price }}</td>
                         <td>
-                            [Todo:Action]
+                            <form action="{{ route('books.restore', [$book->id]) }}" class="d-inline" method="POST">
+                                @csrf
+                                <input type="submit" value="Restore" class="btn btn-success btn-sm">
+                            </form>
+                            <form action="{{ route('books.delete-permanent', [$book->id]) }}" class="d-inline"
+                                onsubmit="return confirm('delete this book permanently')" method="POST">
+                                @csrf
+                                @method('DELETE')
+
+                                <input type="submit" value="Delete" class="btn btn-danger btn-sm">
+                            </form>
                         </td>
                     </tr>
                 @endforeach

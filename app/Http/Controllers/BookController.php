@@ -167,4 +167,28 @@ class BookController extends Controller
 
         return view('books.trash',['books'=>$books]);
     }
+
+    public function restore($id){
+        $buku = book::withTrashed()->findOrFail($id);
+
+        if($buku->trashed()){
+            $buku->restore();
+            return redirect()->route('books.trash')->with('status','Book Succesfully restored');
+        }else{
+            return redirect()->route('books.trash')->with('status','Book is not in trash');
+        }
+    }
+
+    public function deletePermanent($id){
+        $book = book::withTrashed()->findOrFail($id);
+
+        if(!$book->trashed()){
+            return redirect()->route('books.trash')->with('status','Book is not in trash')->with('status_type','alert');
+        }else{
+            $book->categories()->detach();
+            $book->forceDelete();
+
+            return redirect()->route('books.trash')->with('status','Book permanently Deleted!');
+        }
+    }
 }
