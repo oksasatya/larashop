@@ -35,7 +35,13 @@ class UserController extends Controller
         } else {
             $users = User::paginate(10);
         }
-        return view('users.index', ['users' => $users]);
+
+        $data = [
+            'users' => $users,
+            'status' => $status
+        ];
+
+        return view('users.index',$data);
     }
 
     /**

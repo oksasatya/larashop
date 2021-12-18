@@ -13,6 +13,40 @@
                     {{ session('status') }}
                 </div>
             @endif
+            <div class="row">
+                <div class="col-md-6">
+                    <form action="{{ route('books.index') }}">
+                        <div class="input-group">
+                            <input type="text" name="keyword" value="{{ Request::get('keyword') }}" class="form-control"
+                                placeholder="Filter by title">
+                            <div class="input-groupt-append">
+                                <input type="submit" value="Filter" class="btn btn-primary">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br>
+                <div class="col-md-6">
+                    <ul class="nav nav-pills card-header-pills">
+                        <li class="nav-item">
+                            <a href="{{ route('books.index') }}"
+                                class="nav-link {{ Request::get('status') == null && Request::path() == 'books' ? 'active' : '' }}">All</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('books.index', ['status' => 'publish']) }}"
+                                class="nav-link {{ Request::get('status') == 'publish' ? 'active' : '' }}">Publish</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('books.index', ['status' => 'draft']) }}"
+                                class="nav-link {{ Request::get('status') == 'draft' ? 'active' : '' }}">Draft</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('books.trash') }}"
+                                class="nav-link {{ Request::path() == 'books/trash' ? 'active' : '' }}">Trash</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <div class="row mb-3">
                 <div class="col-md-12 text-right">
                     <a href="{{ route('books.create') }}" class="btn btn-primary">Create book</a>
@@ -52,7 +86,8 @@
                         <td>{{ $book->stock }}</td>
                         <td>{{ $book->price }}</td>
                         <td>
-                            <form action="{{ route('books.restore', [$book->id]) }}" class="d-inline" method="POST">
+                            <form action="{{ route('books.restore', [$book->id]) }}" class="d-inline"
+                                method="POST">
                                 @csrf
                                 <input type="submit" value="Restore" class="btn btn-success btn-sm">
                             </form>

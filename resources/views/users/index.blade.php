@@ -10,24 +10,35 @@
         </div>
 
     @endif
-    <form action="{{ route('users.index') }}">
-        <div class="row">
-            <div class="col-md-6">
-                <input type="text" name="keyword" placeholder="Masukkan email untuk filter" class="form-control"
-                    value="{{ Request::get('keyword') }}">
-            </div>
-            <div class="col-md-6">
-                <input type="radio" {{ Request::get('status') == 'ACTIVE' ? 'checked' : '' }} value="ACTIVE" name="status"
-                    class="form-control" id="active">
-                <label for="active">Active</label>
-
-                <input type="radio" {{ Request::get('status') == 'INACTIVE' ? 'checked' : '' }} value="INACTIVE"
-                    name="status" class="form-control" id="inactive">
-                <label for="inactive">Inactive</label>
-                <input type="submit" value="Filter" class="btn btn-primary">
-            </div>
+    <div class="row">
+        <div class="col-md-6">
+            <form action="{{ route('users.index') }}">
+                <div class="input-group">
+                    <input type="text" name="keyword" placeholder="Masukkan email untuk filter" class="form-control"
+                        value="{{ Request::get('keyword') }}">
+                    <div class="input-group-append">
+                        <input type="submit" value="Filter" class="btn btn-primary">
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
+        <div class="col-md-6">
+            <ul class="nav nav-pills card-header-pills">
+                <li class="nav-item">
+                    <a href="{{ route('users.index') }}"
+                        class="nav-link {{ Request::get('status') == null && Request::path() == 'users' ? 'active' : '' }}">All</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('users.index', ['status' => 'active']) }}"
+                        class="nav-link {{ Request::get('status') == 'active' ? 'active' : '' }}">active</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('users.index', ['status' => 'inactive']) }}"
+                        class="nav-link {{ Request::get('status') == 'inactive' ? 'active' : '' }}">inactive</a>
+                </li>
+            </ul>
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-12 text-right">
             <a href="{{ route('users.create') }}" class="btn btn-primary">Create User</a>

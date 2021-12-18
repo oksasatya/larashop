@@ -26,11 +26,12 @@ class BookController extends Controller
 
 
         $status = $request->get('status');
+        $keyword = $request->get('keyword') ? $request->get('keyword') : '';
 
         if($status){
-            $books = Book::with('categories')->where('status',strtoupper($status))->latest()->paginate(10);
+            $books = Book::with('categories')->where('title',"LIKE","%$keyword%")->where('status',strtoupper($status))->latest()->paginate(10);
         }else{
-            $books = Book::with('categories')->latest()->paginate(10);
+            $books = Book::with('categories')->where('title',"LIKE","%$keyword%")->latest()->paginate(10);
         }
 
         return view('books.index', ['books' => $books]);
