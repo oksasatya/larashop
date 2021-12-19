@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class book_category_table extends Model
+class book_order extends Model
 {
     use HasFactory;
-    protected $table = 'book_category';
-    protected $guarded = [];
 }
