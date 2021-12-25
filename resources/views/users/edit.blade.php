@@ -13,9 +13,17 @@
         <form action="{{ route('users.update', [$user->id]) }}" method="post">
             @csrf
             <input type="hidden" value="PUT" name="_method">
+            <label for="name">Name</label>
+            <input type="text" name="name" placeholder="FullName" class="form-control {{ $errors->first('name') }}"
+                value="{{ old('name') ? old('name') : $user->name }}" id="name">
+            <div class="invalid-feedback">
+                {{ $errors->first('name') }}
+            </div>
+            <br>
 
-            <input type="text" name="name" placeholder="FullName" class="form-control" value="{{ $user->name }}"
-                id="name">
+            <label for="username">Username</label>
+            <input type="text" class="form-control {{ $errors->first('username') }}" placeholder="username" disabled
+                name="username" id="username" value="{{ $user->username }}">
 
             <label for="status">status</label>
             <br>
@@ -29,28 +37,43 @@
             <br><br>
 
             <input type="checkbox" {{ in_array('ADMIN', json_decode($user->roles)) ? 'checked' : '' }} name="roles[]"
-                id="ADMIN" value="ADMIN">
+                id="ADMIN" value="ADMIN" class="{{ $errors->first('roles') ? 'is-invalid' : '' }}">
             <label for="ADMIN">Administrator</label>
 
 
             <input type="checkbox" {{ in_array('STAFF', json_decode($user->roles)) ? 'checked' : '' }} name="roles[]"
-                id="STAFF" value="STAFF">
+                id="STAFF" value="STAFF" class="{{ $errors->first('roles') ? 'is-invalid' : '' }}">
             <label for="STAFF">Staff</label>
 
             <input type="checkbox" {{ in_array('CUSTOMER', json_decode($user->roles)) ? 'checked' : '' }} name="roles[]"
-                id="CUSTOMER" value="CUSTOMER">
+                id="CUSTOMER" value="CUSTOMER" class="{{ $errors->first('roles') ? 'is-invalid' : '' }}">
             <label for="CUSTOMER">Customer</label>
+
+            <div class="invalid-feedback">
+                {{ $errors->first('roles') }}
+            </div>
 
             <br>
             <br>
             <label for="phone">Phone Number</label>
             <br>
-            <input type="text" name='phone' class="form-control" value="{{ $user->phone }}">
+            <input type="text" name='phone' class="form-control {{ $errors->first('phone') ? 'is-invalid' : '' }}"
+                value="{{ old('phone') ? old('phone') : $user->phone }}">
+            <div class="invalid-feedback">
+                {{ $errors->first('phone') }}
+            </div>
             <br>
 
             <label for="address">Address</label>
-            <textarea name="address" id="address" class="form-control">{{ $user->address }}</textarea>
+            <textarea name="address" id="address"
+                class="form-control {{ $errors->first('address') ? 'is-invalid' : '' }}"
+                value="{{ old('address') }}">{{ $user->address }}</textarea>
+
+            <div class="invalid-feedback">
+                {{ $errors->first('address') }}
+            </div>
             <br>
+
 
             <label for="avatar">Avatar Image</label>
             <br>
@@ -69,9 +92,16 @@
             <hr class="my-3">
 
             <label for="email">Email</label>
-            <input type="text" name="email" id="email" class="form-control" value="{{ $user->email }}" disabled
-                placeholder="user@gmail.com">
+            <input type="text" name="email" id="email" class="form-control"
+                value="{{ old('email') ? old('email') : $user->email }}" disabled placeholder="user@gmail.com"
+                class="{{ $errors->first('email') ? 'invalid-feedback' : '' }}">
+
+            <div class="invalid-feedback">
+                {{ $errors->first('email') }}
+            </div>
             <br>
+
+
 
             <input type="submit" class="btn btn-primary" value="save">
         </form>

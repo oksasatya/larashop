@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class Storebook_category_tableRequest extends FormRequest
+class UpdateUserRequest extends UserRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,8 @@ class Storebook_category_tableRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|min:3|max:20',
-        ];
+        return array_merge(parent::rules() ,[]);
+
+
     }
 }

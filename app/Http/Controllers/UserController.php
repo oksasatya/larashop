@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use view;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -60,28 +63,29 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserRequest $userRequest)
     {
-        $new_user = new User;
-        $new_user->name = $request->get('name');
-        $new_user->username = $request->get('username');
-        $new_user->roles = json_encode($request->get('roles'));
-        $new_user->name = $request->get('name');
-        $new_user->address = $request->get('address');
-        $new_user->phone = $request->get('phone');
-        $new_user->email = $request->get('email');
-        $new_user->password = Hash::make($request->get('password'));
 
-        if ($request->file('avatar')) {
-            $file = $request->file('avatar')->store('avatars', 'public');
+        $user = User::create([
+            'name' => $userRequest->name,
+            'username' => $userRequest->username,
+            'roles' => json_encode($userRequest->roles),
+            'address' => $userRequest->address,
+            'phone' => $userRequest->phone,
+            'email' => $userRequest->email,
+            'password' => Hash::make($userRequest->password)
+        ]);
 
-            $new_user->avatar = $file;
+
+        if (request()->file('avatar')) {
+            $file = $userRequest->file('avatar')->store('avatars', 'public');
+
+            $user->avatar = $file;
         }
-        $new_user->save();
+
 
         return redirect()->route('users.create')->with('status', 'User Succesfully Create');
     }
-
     /**
      * Display the specified resource.
      *
@@ -114,7 +118,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
         $user = User::findorFail($id);
 

@@ -13,13 +13,24 @@
         <form action="{{ route('categories.update', [$category->id]) }}" enctype="multipart/form-data" method="POST"
             class="bg-white shadow-sm p-3">
             @csrf
-            <input type="hidden" value="put" name="_method">
+            @method('PUT')
             <label for="CategoryName">Category Name</label><br>
-            <input type="text" class="form-control" value="{{ $category->name }}" name="name">
+            <input type="text" class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}"
+                value="{{ old('name') ? old('name') : $category->name }}" name="name">
+
+            <div class="invalid-feedback">
+                {{ $errors->first('name') }}
+            </div>
+            .
             <br><br>
 
             <label for="CategorySlug">Category Slug</label>
-            <input type="text" class="form-control" name="slug" id="slug" value="{{ $category->slug }}">
+            <input type="text" class="form-control {{ $errors->first('slug') ? 'is-invalid' : '' }}" name="slug" id="slug"
+                value="{{ old('slug') ? old('slug') : $category->slug }}">
+
+            <div class="invalid-feedback">
+                {{ $errors->first('slug') }}
+            </div>
             <br><br>
 
             @if ($category->image)

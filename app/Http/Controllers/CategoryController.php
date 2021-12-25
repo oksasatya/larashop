@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Storebook_category_tableRequest;
+use App\Http\Requests\Updatebook_category_tableRequest;
 use App\Models\Category;
 use App\Models\User;
 use Illuminate\Support\Str;
@@ -48,7 +50,7 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Storebook_category_tableRequest $request)
     {
         $name = $request->get('name');
 
@@ -102,33 +104,34 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Updatebook_category_tableRequest $request, $id)
     {
         $name = $request->get('name');
         $slug = $request->get('slug');
 
 
-        $category = Category::findOrFail($id);
+        $categories = Category::findorfail($id);
 
-        $category->name = $name;
-        $category->slug = $slug;
+
+        $categories->name = $name;
+        $categories->slug = $slug;
 
         if ($request->file('image')) {
-            if ($category->image && file_exists(storage_path('app/public/' . $category->image))) {
-                Storage::delete(['public/' . $category->name]);
+            if ($categories->image && file_exists(storage_path('app/public/' . $categories->image))) {
+                Storage::delete(['public/' . $categories->name]);
             }
 
             $new_image = $request->file('image')->store('category_images', 'public');
 
-            $category->image = $new_image;
+            $categories->image = $new_image;
         }
-        $category->updated_by = Auth::user()->id;
+        $categories->updated_by = Auth::user()->id;
 
-        $category->slug = Str::slug($name);
+        $categories->slug = Str::slug($name);
 
-        $category->save();
+        $categories->save();
 
-        return redirect()->route('categories.edit', [$id])->with('status', 'Category Succesfully Create');
+        return redirect()->route('categories.edit', [$id])->with('status', 'Category Succesfully Update');
     }
 
     /**
