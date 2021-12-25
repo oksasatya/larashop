@@ -7,6 +7,28 @@
 @endsection
 
 @section('content')
+
+    <form action="{{ route('orders.index') }}">
+        <div class="row">
+            <div class="col-md-5">
+                <input type="text" value="{{ Request::get('buyer_email') }}" name="buyer_email" class="form-control"
+                    placeholder="Search by buyer email">
+            </div>
+            <div class="col-md-2">
+                <select name="status" id="status" class="form-control">
+                    <option value="">ANY</option>
+                    <option value="SUBMIT" {{ Request::get('status') == 'SUBMIT' ? 'selected' : '' }}>SUBMIT</option>
+                    <option value="PROCESS" {{ Request::get('status') == 'PROCESS' ? 'selected' : '' }}>PROCESS</option>
+                    <option value="FINISH" {{ Request::get('status') == 'FINISH' ? 'selected' : '' }}>FINISH</option>
+                    <option value="CANCEL" {{ Request::get('status') == 'CANCEL' ? 'selected' : '' }}>CANCEL</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="submit" value="Filter" class="btn btn-primary">
+            </div>
+        </div>
+    </form>
+    <hr class="my-3">
     <div class="row">
         <div class="col-md-12">
             <table class="table table-stripped table-bordered">
@@ -46,7 +68,7 @@
                             <td>{{ $order->created_at }}</td>
                             <td>{{ $order->total_price }}</td>
                             <td>
-                                [TODO:Actions]
+                                <a href="{{ route('orders.edit', [$order->id]) }}" class="btn btn-info btn-sm">Edit</a>
                             </td>
                         </tr>
                     @endforeach

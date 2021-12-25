@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\order;
 use App\Http\Requests\StoreorderRequest;
 use App\Http\Requests\UpdateorderRequest;
+use App\Models\order;
+use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
@@ -13,11 +14,24 @@ class OrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = Order::with('user')->with('books')->latest()->paginate(10);
+        $status = $request->get('status');
+        $buyerEmail = $request->get('buyer_email');
 
-        return view('orders.index',['orders' => $orders]);
+
+
+        $orders = Order::with('user')
+        ->with('books')
+        ->whereHas('user',function($query) use ($buyerEmail){
+            $query->where('email','LIKE' ,"%$buyerEmail%");
+        })
+        ->where('status','LIKE',"%$status%")
+        ->latest()->paginate(10);
+
+
+
+        return view('orders.index', ['orders' => $orders]);
     }
 
     /**
@@ -58,9 +72,11 @@ class OrderController extends Controller
      * @param  \App\Models\order  $order
      * @return \Illuminate\Http\Response
      */
-    public function edit(order $order)
+    public function edit($id)
     {
-        //
+        $order = order::findorfail($id);
+
+        return view('orders.edit', ['order' => $order]);
     }
 
     /**
@@ -70,9 +86,13 @@ class OrderController extends Controller
      * @param  \App\Models\order  $order
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateorderRequest $request, order $order)
+    public function update(Request $request,$id)
     {
-        //
+        $order = order::findorfail($id);
+        $order->status = $request->get('status');
+
+        $order->save();
+        return redirect()->route('orders.edit',[$order->id])->with('status','order status successfully updated ! ');
     }
 
     /**
