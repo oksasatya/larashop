@@ -6,6 +6,7 @@ use view;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdateUserRequest;
@@ -41,10 +42,10 @@ class UserController extends Controller
 
         $data = [
             'users' => $users,
-            'status' => $status
+            'status' => $status,
         ];
 
-        return view('users.index',$data);
+        return view('users.index', $data);
     }
 
     /**
@@ -63,22 +64,22 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $userRequest)
+    public function store(UserRequest $request)
     {
 
+
         $user = User::create([
-            'name' => $userRequest->name,
-            'username' => $userRequest->username,
-            'roles' => json_encode($userRequest->roles),
-            'address' => $userRequest->address,
-            'phone' => $userRequest->phone,
-            'email' => $userRequest->email,
-            'password' => Hash::make($userRequest->password)
+            'name' => $request->name,
+            'username' => $request->username,
+            'roles' => json_encode($request->roles),
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
         ]);
 
-
-        if (request()->file('avatar')) {
-            $file = $userRequest->file('avatar')->store('avatars', 'public');
+        if (request('avatar')) {
+            $file = $request->file('avatar')->store('avatars', 'public');
 
             $user->avatar = $file;
         }
@@ -118,28 +119,29 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateUserRequest $request, $id)
+    public function update(UpdateUserRequest $updateUserRequest,$id)
     {
-        $user = User::findorFail($id);
+        $request = new Request();
+        $user = User::findorfail($id);
+        $user->name = $updateUserRequest->name;
+        $user->roles = json_encode($updateUserRequest->roles);
+        $user->address = $updateUserRequest->address;
+        $user->phone = $updateUserRequest->phone;
+        $user->status = $updateUserRequest->status;
 
-        $user->name = $request->get('name');
-        $user->roles = json_encode($request->get('roles'));
-        $user->address = $request->get('address');
-        $user->phone = $request->get('phone');
-        $user->status = $request->get('status');
 
-        if ($request->file('avatar')) {
-            if ($user->avatar && file_exists(storage_path('app/public/' . $user->avatar))) {
-                Storage::detele('\public' . $user->avatar);
+        if($request->file('avatar')){
+            if($user->avatar && file_exists(storage_path('app/public/' . $user->avatar))){
+                Storage::delete('public/'.$user->avatar);
             }
             $file = $request->file('avatar')->store('avatars', 'public');
             $user->avatar = $file;
         }
-        $user->save();
+        // dd($user->avatar);
 
+        $user->save($request->all());
         return redirect()->route('users.edit', [$id])->with('status', 'User Succesfully updated');
     }
-
     /**
      * Remove the specified resource from storage.
      *

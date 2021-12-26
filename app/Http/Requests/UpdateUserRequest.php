@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UpdateUserRequest extends UserRequest
 {
@@ -13,7 +14,7 @@ class UpdateUserRequest extends UserRequest
      */
     public function authorize()
     {
-        return true;
+        return Auth::user();
     }
 
     /**
@@ -23,7 +24,15 @@ class UpdateUserRequest extends UserRequest
      */
     public function rules()
     {
-        return array_merge(parent::rules() ,[]);
+        $userID = Auth::id();
+        return [
+            "name" => "required|min:5|max:100".$userID,
+            "roles" => "required",
+            "phone" => "required|digits_between:10,12",
+            "address" => "required|min:20|max:200",
+            // 'avatar' => 'required|image'
+
+        ];
 
 
     }

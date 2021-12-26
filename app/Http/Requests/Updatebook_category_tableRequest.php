@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Models\Category;
 use Illuminate\Validation\Rule;
-use Illuminate\Foundation\Http\FormRequest;
 
 class Updatebook_category_tableRequest extends Storebook_category_tableRequest
 {
@@ -25,19 +24,8 @@ class Updatebook_category_tableRequest extends Storebook_category_tableRequest
      */
     public function rules()
     {
-        return array_merge(parent::rules(),[
-            'slug' => ['required', Rule::unique("categories")->ignore(Category::where('slug')->first(),'slug')]
+        return array_merge(parent::rules(), [
+            'slug' => ['required', Rule::unique("categories")->ignore(Category::where('slug')->first(), 'slug')],
         ]);
     }
-
-    // public function execute($id){
-
-    //     $category = Category::findOrFail($id);
-
-    //     return array_merge(parent::rules(),[
-    //         'slug' => ['required', Rule::unique("categories")->ignore($category->slug, "slug")]
-    //     ]);
-
-    //     $category->save();
-    // }
 }

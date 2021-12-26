@@ -12,9 +12,10 @@
 
         <form action="{{ route('users.update', [$user->id]) }}" method="post">
             @csrf
-            <input type="hidden" value="PUT" name="_method">
+            @method('PUT')
             <label for="name">Name</label>
-            <input type="text" name="name" placeholder="FullName" class="form-control {{ $errors->first('name') }}"
+            <input type="text" name="name" placeholder="FullName"
+                class="form-control {{ $errors->first('name') ? 'is-invalid' : '' }}"
                 value="{{ old('name') ? old('name') : $user->name }}" id="name">
             <div class="invalid-feedback">
                 {{ $errors->first('name') }}
@@ -37,18 +38,17 @@
             <br><br>
 
             <input type="checkbox" {{ in_array('ADMIN', json_decode($user->roles)) ? 'checked' : '' }} name="roles[]"
-                id="ADMIN" value="ADMIN" class="{{ $errors->first('roles') ? 'is-invalid' : '' }}">
+                id="ADMIN" value="ADMIN" class=" form-control {{ $errors->first('roles') ? 'is-invalid' : '' }}">
             <label for="ADMIN">Administrator</label>
 
 
             <input type="checkbox" {{ in_array('STAFF', json_decode($user->roles)) ? 'checked' : '' }} name="roles[]"
-                id="STAFF" value="STAFF" class="{{ $errors->first('roles') ? 'is-invalid' : '' }}">
+                id="STAFF" value="STAFF" class="form-control {{ $errors->first('roles') ? 'is-invalid' : '' }}">
             <label for="STAFF">Staff</label>
 
             <input type="checkbox" {{ in_array('CUSTOMER', json_decode($user->roles)) ? 'checked' : '' }} name="roles[]"
-                id="CUSTOMER" value="CUSTOMER" class="{{ $errors->first('roles') ? 'is-invalid' : '' }}">
+                id="CUSTOMER" value="CUSTOMER" class="form-control {{ $errors->first('roles') ? 'is-invalid' : '' }}">
             <label for="CUSTOMER">Customer</label>
-
             <div class="invalid-feedback">
                 {{ $errors->first('roles') }}
             </div>
