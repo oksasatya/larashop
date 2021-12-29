@@ -16,16 +16,31 @@
                 @csrf
 
                 <label for="title">Title</label><br>
-                <input type="text" class="form-control" name="title" placeholder="Book Title">
+                <input type="text" class="form-control @error('title') is-invalid @enderror" name="title" placeholder="Book Title" value="{{ old('title') }}">
+                @error('title')
+                <div class="invalid-feedback">
+                    {{ $message  }}
+                </div>
+                @enderror
                 <br>
 
                 <label for="cover">Cover</label>
-                <input type="file" class="form-control" name="cover">
+                <input type="file" class="form-control @error('cover') is-invalid @enderror" name="cover" value="{{ old('cover') }}">
+                @error('cover')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
                 <br>
 
                 <label for="description">description</label><br>
-                <textarea name="description" id="description" class="form-control"
-                    placeholder="Give a description about this book"></textarea>
+                <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror"
+                    placeholder="Give a description about this book" value="{{ old('description') }}"></textarea>
+                    @error('description')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 <br>
 
                 <label for="categories">Categories</label><br>
@@ -33,19 +48,41 @@
                 <br><br>
 
                 <label for="stock">Stock</label><br>
-                <input type="number" class="form-control" name="stock" id="stock" min="0" value="0">
+                <input type="number" class="form-control @error('Stock') is-invalid @enderror" name="stock" id="stock" min="0" value="0" value="{{ old('stock') }}">
+                @error('stock')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
                 <br>
 
                 <label for="author">Author</label><br>
-                <input type="text" class="form-control" name="author" id="author" placeholder="Book Author">
+                <input type="text" class="form-control  @error('author') is-invalid @enderror" value="{{ old('author') }}" name="author" id="author" placeholder="Book Author">
+                @error('author')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
                 <br>
 
                 <label for="publisher">Publisher</label>
-                <input type="text" class="form-control" name="publisher" id="publisher" placeholder="Book publisher">
+                <input type="text" class="form-control @error('publisher') is-invalid @enderror" value="{{ old('author') }}" name="publisher" id="publisher" placeholder="Book publisher">
+                @error('publisher')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+
+                @enderror
                 <br>
 
                 <label for="price">Price</label><br>
-                <input type="number" class="form-control" name="price" id="price" placeholder="Book Price">
+                <input type="number" value="{{ old('price') }}" class="form-control @error('price') is-invalid @enderror" name="price" id="price" placeholder="Book Price">
+                @error('price')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+
+                @enderror
                 <br>
 
                 <button class="btn btn-primary" name="save_action" value="PUBLISH">Publish</button>

@@ -25,7 +25,7 @@ class Updatebook_category_tableRequest extends Storebook_category_tableRequest
     public function rules()
     {
         return array_merge(parent::rules(), [
-            'slug' => ['required', Rule::unique("categories")->ignore(Category::where('slug')->first(), 'slug')],
+            'slug' => ['required', Rule::unique("categories")->ignore(Category::select('slug')->first(), 'slug')],
         ]);
     }
 }
