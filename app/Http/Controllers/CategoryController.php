@@ -12,10 +12,20 @@ use PhpParser\Node\Expr\New_;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Cache\Store;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(function($request,$next){
+        if(Gate::allows('manage-categories')) return $next($request);
+            abort(403,'Anda Tidak Memiliki Hak akses');
+        });
+    }
+
     /**
      * Display a listing of the resource.
      *

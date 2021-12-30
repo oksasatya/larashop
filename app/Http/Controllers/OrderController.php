@@ -2,13 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreorderRequest;
-use App\Http\Requests\UpdateorderRequest;
 use App\Models\order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\StoreorderRequest;
+use App\Http\Requests\UpdateorderRequest;
 
 class OrderController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(function($request, $next){
+
+            if(Gate::allows('manage-orders')) return $next($request);
+
+            abort(403, 'Anda tidak memiliki cukup hak akses');
+          });
+    }
     /**
      * Display a listing of the resource.
      *

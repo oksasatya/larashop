@@ -6,16 +6,28 @@ use App\Models\book;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\StorebookRequest;
 // use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\StorebookRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatebookRequest;
 use Illuminate\Support\Facades\Validator;
 
 class BookController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(function($request, $next){
+
+            if(Gate::allows('manage-orders')) return $next($request);
+
+            abort(403, 'Anda tidak memiliki cukup hak akses');
+        });
+    }
     /**
      * Display a listing of the resource.
      *
@@ -133,7 +145,21 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $book = Book::findOrFail($id);
+        Validator::make($request->all(),[
+            'title' => 'required|min:5|max:200',
+            'slug' => [
+                'required',
+                Rule::unique('books')->ignore($book->slug,'slug')
+            ],
+            'description' => 'required|min:20|max:2000',
+            'author' => 'required|min:3|max:100',
+            'price' => 'required|digits_between:0,10',
+            'publisher' => 'required|min:3|max:200',
+            'stock' => 'required|digits_between:0,10'
+        ])->validate();
+
 
         $book->title = $request->get('title');
         $book->slug = $request->get('slug');

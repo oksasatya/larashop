@@ -20,7 +20,10 @@
                 @method('PUT')
 
                 <label for="title">Title</label><br>
-                <input type="text" class="form-control" value="{{ $book->title }}" name="title" placeholder="Book Title">
+                <input type="text" class="form-control @error('title') is-invalid @enderror" value="{{ old('title') ? old('title') : $book->title }}" name="title" placeholder="Book Title">
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
                 <br>
 
 
@@ -31,40 +34,58 @@
                 @endif
                 <br><br>
 
-                <input type="file" class="form-control" name="cover">
+                <input type="file" class="form-control @error('cover') is-invalid @enderror" name="cover">
                 <small class="text-muted">Kosongkan jika tidak ingin mengubah cover</small>
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
                 <br><br>
 
                 <label for="slug">Slug</label><br>
-                <input type="text" class="form-control" value="{{ $book->slug }}" name="slug" placeholder="enter-a-slug">
+                <input type="text" class="form-control @error('slug') is-invalid @enderror" value="{{ old('slug') ? old('slug') : $book->slug }}" name="slug" placeholder="enter-a-slug">
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
                 <br>
 
                 <label for="description">Description</label><br>
-                <textarea name="description" id="description" class="form-control">{{ $book->description }}</textarea>
+                <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror">{{ $book->description }}</textarea>
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
                 <br>
 
                 <label for="categories">Categories</label>
-                <select name="categories[]" id="categories" multiple class="form-control"></select>
+                <select name="categories[]" id="categories" multiple class="form-control @error('categories') is-invalid @enderror"></select>
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
                 <br>
                 <br>
 
                 <label for="stock">Stock</label><br>
-                <input type="text" class="form-control" name="stock" id="stock" value="{{ $book->stock }}"
+                <input type="text" class="form-control @error('stock') is-invalid @enderror" name="stock" id="stock" value="{{ old('stock') ? old('stock') :  $book->stock }}"
                     placeholder="stock">
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
                 <br>
 
 
                 <label for="suthor">Author</label>
-                <input type="text" id="author" name="author" class="form-control" value="{{ $book->author }}"
+                <input type="text" id="author" name="author" class="form-control @error('author') ? is-invalid @enderror" value="{{  old('author') ? old('author') : $book->author }}"
                     placeholder="Author">
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
                 <br>
 
                 <label for="publisher">Publisher</label>
-                <input type="text" id="publisher" name="publisher" class="form-control" value="{{ $book->publisher }}">
+                <input type="text" id="publisher" name="publisher" class="form-control @error('publisher') is-invalid @enderror" value="{{ old('publisher') ? old('publisher') : $book->publisher }}">
                 <br>
 
                 <label for="price">Price</label>
-                <input type="text" id="price" name="price" class="form-control" value="{{ $book->price }}">
+                <input type="text" id="price" name="price" class="form-control @error('price') is-invalid @enderror" value="{{ old('price') ? old('price') : $book->price }}">
                 <br>
 
                 <label for="status">Status</label>
